@@ -13,3 +13,11 @@
 .snake {
   background: green;
 }
+
+.food {
+  background: red;
+}
+
+.head {
+  background: limegreen;
+}
