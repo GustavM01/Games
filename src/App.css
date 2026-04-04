@@ -183,6 +183,30 @@
   }
 }
 
+.btn {
+  /* flex: 1; */
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #aaa;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.btn.active {
+  background: rgb(93, 0, 93);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
 .game-type-container {
   display: flex;
   flex-direction: row;
@@ -237,6 +261,7 @@
   font-weight: bold;
   border-radius: 5px;
   border: none;
+  background-color: #6b6b6b;
 }
 .square:hover {
   background-color: gray;

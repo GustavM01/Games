@@ -1,0 +1,11 @@
+.navbar {
+  margin: 40px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.navbar-item {
+  text-decoration: none;
+  width: fit-content;
+}

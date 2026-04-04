@@ -7,17 +7,84 @@
 .cell {
   width: 20px;
   height: 20px;
-  background: #eee;
+  background: #6b6b6b;
+  transition:
+    background 0.2s,
+    border-radius 0.2s;
+  border-radius: 2px;
+}
+
+.snake-btn-container {
+  display: flex;
+  gap: 20px;
 }
 
 .snake {
-  background: green;
+  background: rgb(0, 163, 0);
+  border-radius: 5px;
 }
 
 .food {
   background: red;
+  border-radius: 7px;
+  position: relative;
+}
+
+.food::after {
+  position: absolute;
+  content: "";
+  width: 2.5px;
+  height: 7px;
+  background: green;
+  top: -4.5px;
+  right: 6.5px;
+  transform: rotate(30deg);
+  border-radius: 3px / 5px;
+  border: 1px solid darkgreen;
 }
 
 .head {
   background: limegreen;
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cell.head {
+  position: relative;
+  transform-origin: center;
+  will-change: transform;
+}
+
+.head-up {
+  transform: rotate(0deg) translateZ(0);
+}
+.head-right {
+  transform: rotate(90deg) translateZ(0);
+}
+.head-down {
+  transform: rotate(180deg) translateZ(0);
+}
+.head-left {
+  transform: rotate(270deg) translateZ(0);
+}
+
+.head::before,
+.head::after {
+  content: "";
+  position: absolute;
+  width: 5.5px;
+  height: 5.5px;
+  background: white;
+  border-radius: 50%;
+  top: 3px;
+  box-shadow: inset 2.2px 2.2px 0 black;
+}
+
+.head::before {
+  left: 3px;
+}
+
+.head::after {
+  right: 3px;
 }
