@@ -8,6 +8,7 @@ function Snake() {
     [5, 6],
     [5, 7],
   ]);
+  const snakeRef = useRef(snake);
   const [direction, setDirection] = useState([0, 1]);
   const directionRef = useRef(direction);
   const [food, setFood] = useState([10, 10]);
@@ -18,9 +19,15 @@ function Snake() {
   const [highScore, setHighScore] = useState(
     () => parseInt(localStorage.getItem("snakeHighScore")) || 0,
   );
+  const [showGameOver, setShowGameOver] = useState(false);
+  const gameOverRef = useRef(showGameOver);
 
-  //Strictmode gör så att den räknar poäng 2 ggr därför har jag denna
+  //Strictmode gör så att den räknar poäng 2 ggr därför har jag denna // Behövs nog inte nu löste det på ett annat sätt
   const [hasEaten, setHasEaten] = useState(false);
+
+  useEffect(() => {
+    gameOverRef.current = showGameOver;
+  }, [showGameOver]);
 
   useEffect(() => {
     foodRef.current = food;
@@ -30,6 +37,10 @@ function Snake() {
     playingRef.current = playing;
   }, [playing]);
 
+  useEffect(() => {
+    snakeRef.current = snake;
+  }, [snake]);
+
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
@@ -37,68 +48,73 @@ function Snake() {
   }, [direction]);
 
   function moveSnake() {
-    setSnake((prevSnake) => {
-      let newSnake = [...prevSnake];
-      let headPosition = prevSnake[prevSnake.length - 1];
-      let newPosition = [
-        headPosition[0] + directionRef.current[0],
-        headPosition[1] + directionRef.current[1],
-      ];
+    let prevSnake = snakeRef.current;
+    let headPosition = prevSnake[prevSnake.length - 1];
+    let newPosition = [
+      headPosition[0] + directionRef.current[0],
+      headPosition[1] + directionRef.current[1],
+    ];
 
-      if (
-        newPosition[0] >= 20 ||
-        newPosition[0] < 0 ||
-        newPosition[1] >= 20 ||
-        newPosition[1] < 0
-      ) {
-        handleReset();
+    const newSnake = [...prevSnake];
+
+    if (
+      newPosition[0] >= 20 ||
+      newPosition[0] < 0 ||
+      newPosition[1] >= 20 ||
+      newPosition[1] < 0
+    ) {
+      setShowGameOver(true);
+      setPlaying(false);
+      handleReset();
+      return;
+    }
+
+    if (
+      newSnake.some(([r, c]) => r === newPosition[0] && c === newPosition[1])
+    ) {
+      setShowGameOver(true);
+      setPlaying(false);
+      handleReset();
+      return;
+    }
+
+    const ateFood =
+      newPosition[0] === foodRef.current[0] &&
+      newPosition[1] === foodRef.current[1];
+
+    if (!ateFood) {
+      newSnake.shift();
+      setHasEaten(false);
+    } else {
+      if (hasEaten === false) {
+        setPoints((prev) => {
+          const newPoint = prev + 1;
+          setHasEaten(true);
+
+          if (newPoint > highScore) {
+            setHighScore(newPoint);
+            localStorage.setItem("snakeHighScore", newPoint);
+          }
+          return newPoint;
+        });
+
+        setFood(() => {
+          let newFood;
+          do {
+            newFood = [
+              Math.floor(Math.random() * 20),
+              Math.floor(Math.random() * 20),
+            ];
+          } while (
+            newSnake.some(([r, c]) => r === newFood[0] && c == newFood[1])
+          );
+          return newFood;
+        });
       }
+    }
 
-      if (
-        prevSnake.some(([r, c]) => r === newPosition[0] && c === newPosition[1])
-      ) {
-        handleReset();
-        return prevSnake;
-      }
-
-      const ateFood =
-        newPosition[0] === foodRef.current[0] &&
-        newPosition[1] === foodRef.current[1];
-
-      if (!ateFood) {
-        newSnake.shift();
-        setHasEaten(false);
-      } else {
-        if (hasEaten === false) {
-          setPoints((prev) => {
-            const newPoint = prev + 1;
-            setHasEaten(true);
-
-            if (newPoint > highScore) {
-              setHighScore(newPoint);
-              localStorage.setItem("snakeHighScore", newPoint);
-            }
-            return newPoint;
-          });
-
-          setFood(() => {
-            let newFood;
-            do {
-              newFood = [
-                Math.floor(Math.random() * 20),
-                Math.floor(Math.random() * 20),
-              ];
-            } while (
-              prevSnake.some(([r, c]) => r === newFood[0] && c == newFood[1])
-            );
-            return newFood;
-          });
-        }
-      }
-
-      newSnake.push(newPosition);
-      return newSnake;
-    });
+    newSnake.push(newPosition);
+    setSnake(newSnake);
   }
 
   useEffect(() => {
@@ -113,23 +129,25 @@ function Snake() {
 
   useEffect(() => {
     function handleKey(e) {
-      if (e.key === "ArrowUp" && directionRef.current[0] === 0) {
-        setDirection([-1, 0]);
-        !playing && setPlaying(true);
-      }
-      if (e.key === "ArrowDown" && directionRef.current[0] === 0) {
-        setDirection([1, 0]);
-        !playing && setPlaying(true);
-      }
-      if (e.key === "ArrowLeft" && directionRef.current[1] === 0) {
-        setDirection([0, -1]);
-        !playing && setPlaying(true);
-      }
-      if (e.key === "ArrowRight") {
-        if (directionRef.current[1] === 0) {
-          setDirection([0, 1]);
-        } else {
-          setPlaying(true);
+      if (gameOverRef.current === false) {
+        if (e.key === "ArrowUp" && directionRef.current[0] === 0) {
+          setDirection([-1, 0]);
+          !playing && setPlaying(true);
+        }
+        if (e.key === "ArrowDown" && directionRef.current[0] === 0) {
+          setDirection([1, 0]);
+          !playing && setPlaying(true);
+        }
+        if (e.key === "ArrowLeft" && directionRef.current[1] === 0) {
+          setDirection([0, -1]);
+          !playing && setPlaying(true);
+        }
+        if (e.key === "ArrowRight") {
+          if (directionRef.current[1] === 0) {
+            setDirection([0, 1]);
+          } else {
+            setPlaying(true);
+          }
         }
       }
     }
@@ -137,6 +155,19 @@ function Snake() {
 
     return () => window.removeEventListener("keydown", handleKey);
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Enter" && showGameOver) {
+        setShowGameOver(false);
+        handleReset();
+        setPoints(0);
+        return;
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [showGameOver]);
 
   function handleStart() {
     if (playingRef.current === false) {
@@ -147,8 +178,6 @@ function Snake() {
   }
 
   function handleReset() {
-    setPoints(0);
-    setPlaying(false);
     setSnake([
       [5, 5],
       [5, 6],
@@ -160,7 +189,20 @@ function Snake() {
 
   return (
     <div className="container">
-      <p>{points}</p>
+      <div className="points-container">
+        {showGameOver && (
+          <div className="overlay">
+            <div className="overlay-card">
+              <p>Game Over</p>
+              <p>Score: {points}</p>
+              <p>Best score {highScore}</p>
+              <p className="continue">Press Enter to continue</p>
+            </div>
+          </div>
+        )}
+        <p>Points: {points}</p>
+        <p>High score: {highScore}</p>
+      </div>
       <div className="grid">
         {Array.from({ length: 20 }).map((_, row) =>
           Array.from({ length: 20 }).map((_, col) => {

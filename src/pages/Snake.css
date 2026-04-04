@@ -14,6 +14,47 @@
   border-radius: 2px;
 }
 
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.overlay-card {
+  /* top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  background: rgba(52, 52, 52, 0.95);
+  padding: 30px 40px;
+  border-radius: 12px;
+  font-size: x-large;
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: pop 0.25s ease;
+}
+
+.continue {
+  font-size: medium;
+  color: lightgray;
+}
+
+.points-container {
+  display: flex;
+  gap: 30px;
+}
+
 .snake-btn-container {
   display: flex;
   gap: 20px;
@@ -87,4 +128,13 @@
 
 .head::after {
   right: 3px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
