@@ -158,7 +158,7 @@ function Snake() {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Enter" && showGameOver) {
+      if (event.key === " " && showGameOver) {
         setShowGameOver(false);
         handleReset();
         setPoints(0);
@@ -196,7 +196,7 @@ function Snake() {
               <p>Game Over</p>
               <p>Score: {points}</p>
               <p>Best score {highScore}</p>
-              <p className="continue">Press Enter to continue</p>
+              <p className="continue">Press Spacebar to continue</p>
             </div>
           </div>
         )}
