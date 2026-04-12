@@ -1,0 +1,63 @@
+.connect-grid {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(7, 100px);
+  gap: 10px;
+  justify-content: center;
+  width: fit-content;
+  padding: 10px;
+  background: gray;
+  border-radius: 10px;
+  box-shadow: 0px 3px 10px black;
+  margin-top: 20px;
+}
+
+.holes.p1 {
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.holes.p2 {
+  background: limegreen;
+  box-shadow: none;
+}
+
+.holes.p1,
+.holes.p2 {
+  box-shadow: inset 1px -1px 2px 2px black;
+}
+
+.holes {
+  background: var(--bg);
+  box-shadow: inset 7px -3px 3px black;
+  border-radius: 50%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.preview-disc {
+  position: absolute;
+  box-shadow: 0px 3px 10px black;
+  top: -95px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  z-index: -1;
+  transition:
+    left 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+    background 0.15s ease;
+}
+
+.topRow:hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: var(--bg-hover);
+}

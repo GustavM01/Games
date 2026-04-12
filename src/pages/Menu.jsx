@@ -54,6 +54,16 @@ function Menu() {
           >
             Snake
           </Link>
+          <Link
+            className={
+              location.pathname === "/connectfour"
+                ? "navbar-item btn active"
+                : "navbar-item btn"
+            }
+            to="/connectfour"
+          >
+            Connect four
+          </Link>
           <button
             className={theme === "dark" ? "theme-btn dark" : "theme-btn light"}
             onClick={() => changeTheme()}

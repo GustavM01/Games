@@ -3,6 +3,7 @@ import TicTacToe from "./pages/TicTacToe";
 import Snake from "./pages/Snake";
 import Menu from "./pages/Menu";
 import "./App.css";
+import ConnectFour from "./pages/ConnectFour";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           {/* <Route index element={<h1>Välj ett spel</h1>} /> */}
           <Route path="tictactoe" element={<TicTacToe />} />
           <Route path="snake" element={<Snake />} />
+          <Route path="connectfour" element={<ConnectFour />} />
         </Route>
       </Routes>
     </BrowserRouter>
