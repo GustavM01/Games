@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ConnectFour.css";
 
 function ConnectFour() {
@@ -10,6 +10,9 @@ function ConnectFour() {
   const [hoveredCol, setHoveredCol] = useState(null);
   const [fallingDisc, setFallingDisc] = useState(null);
   const [playing, setPlaying] = useState(true);
+  const [gameOver, setGameOver] = useState(false);
+  const [showPreviewDisc, setShowPreviewDisc] = useState(true);
+  const [winningLine, setWinningline] = useState([[]]);
 
   const columns = Array.from({ length: 7 });
   const rows = Array.from({ length: 6 });
@@ -84,7 +87,7 @@ function ConnectFour() {
     });
 
     setCurrentPlayer((p) => (p === 1 ? 2 : 1));
-
+    setPlaying(false);
     setTimeout(() => {
       if (player === 1) {
         setPlayerOneDiscs((prev) => [...prev, [row, col]]);
@@ -102,7 +105,9 @@ function ConnectFour() {
 
       if (checkWin(row, col, newDiscs)) {
         setPlaying(false);
-        alert("WIN!");
+        setGameOver(true);
+      } else {
+        setPlaying(true);
       }
     }, 350);
   }
@@ -112,17 +117,37 @@ function ConnectFour() {
     setPlayerTwoDiscs([]);
     setCurrentPlayer(1);
     setPlaying(true);
+    setGameOver(false);
+    setShowPreviewDisc(true);
   }
 
   return (
     <div className="container" style={{ position: "relative" }}>
       <div className="connect-grid">
+        {gameOver && (
+          <div
+            className="overlay"
+            onClick={() => {
+              setGameOver(false);
+              setShowPreviewDisc(false);
+            }}
+          >
+            <div className="overlay-card">
+              <p>Player {currentPlayer} won!</p>
+              <p className="continue">Click anywhere to continue</p>
+            </div>
+          </div>
+        )}
         {columns.map((_, col) => (
           <div
             key={col}
             className="column"
-            onMouseEnter={() => setHoveredCol(col)}
-            onMouseLeave={() => setHoveredCol(null)}
+            onMouseEnter={() => {
+              if (showPreviewDisc) setHoveredCol(col);
+            }}
+            onMouseLeave={() => {
+              if (showPreviewDisc) setHoveredCol(null);
+            }}
             onClick={() => handlePutDisc(col)}
           >
             {rows.map((_, row) => {
@@ -145,7 +170,7 @@ function ConnectFour() {
               <div
                 className="falling-disc"
                 style={{
-                  transform: `translateY(${fallingDisc.animating ? fallingDisc.row * 110 : -100}px)`,
+                  transform: `translateY(${fallingDisc.animating ? fallingDisc.row * 90 : -100}px)`,
                   background:
                     fallingDisc.player === 1 ? "var(--accent)" : "limegreen",
                 }}
@@ -153,11 +178,11 @@ function ConnectFour() {
             )}
           </div>
         ))}
-        {hoveredCol !== null && (
+        {hoveredCol !== null && !gameOver && (
           <div
             className="preview-disc"
             style={{
-              left: hoveredCol * 110 + 15,
+              left: hoveredCol * 90 + 15,
               background: currentPlayer === 1 ? "var(--accent)" : "limegreen",
             }}
           />
