@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./ConnectFour.css";
 
 function ConnectFour() {
-  const [playerOneDiscs, setPlayerOneDiscs] = useState([[]]);
+  const [playerOneDiscs, setPlayerOneDiscs] = useState([]);
 
-  const [playerTwoDiscs, setPlayerTwoDiscs] = useState([[]]);
+  const [playerTwoDiscs, setPlayerTwoDiscs] = useState([]);
 
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [hoveredCol, setHoveredCol] = useState(null);
@@ -12,7 +12,8 @@ function ConnectFour() {
   const [playing, setPlaying] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [showPreviewDisc, setShowPreviewDisc] = useState(true);
-  const [winningLine, setWinningline] = useState([[]]);
+  const [winningLine, setWinningLine] = useState([]);
+  const [winner, setWinner] = useState();
 
   const columns = Array.from({ length: 7 });
   const rows = Array.from({ length: 6 });
@@ -28,7 +29,7 @@ function ConnectFour() {
   }
 
   function checkDirection(row, col, dRow, dCol, discs) {
-    let count = 0;
+    let line = [];
 
     let r = row;
     let c = col;
@@ -37,12 +38,12 @@ function ConnectFour() {
       const found = discs.some(([rr, cc]) => rr === r && cc === c);
 
       if (!found) break;
+      line = [...line, [r, c]];
 
-      count++;
       r += dRow;
       c += dCol;
     }
-    return count;
+    return line;
   }
 
   function checkWin(row, col, discs) {
@@ -53,14 +54,18 @@ function ConnectFour() {
       [1, -1],
     ];
 
-    return directions.some(([dr, dc]) => {
-      const total =
-        checkDirection(row, col, dr, dc, discs) +
-        checkDirection(row, col, -dr, -dc, discs) -
-        1;
+    for (const [dr, dc] of directions) {
+      const forward = checkDirection(row, col, dr, dc, discs);
+      const backward = checkDirection(row, col, -dr, -dc, discs);
 
-      return total >= 4;
-    });
+      const fullLine = [...backward.reverse(), ...forward.slice(1)];
+
+      if (fullLine.length >= 4) {
+        return { win: true, line: fullLine };
+      }
+    }
+
+    return { win: false, line: [] };
   }
 
   function handlePutDisc(col) {
@@ -102,10 +107,13 @@ function ConnectFour() {
         currentPlayer === 1
           ? [...playerOneDiscs, newDisc]
           : [...playerTwoDiscs, newDisc];
+      const result = checkWin(row, col, newDiscs);
 
-      if (checkWin(row, col, newDiscs)) {
+      if (result.win) {
         setPlaying(false);
         setGameOver(true);
+        setWinningLine(result.line);
+        setWinner(player);
       } else {
         setPlaying(true);
       }
@@ -119,6 +127,7 @@ function ConnectFour() {
     setPlaying(true);
     setGameOver(false);
     setShowPreviewDisc(true);
+    setWinningLine([]);
   }
 
   return (
@@ -133,7 +142,7 @@ function ConnectFour() {
             }}
           >
             <div className="overlay-card">
-              <p>Player {currentPlayer} won!</p>
+              <p>Player {winner} won!</p>
               <p className="continue">Click anywhere to continue</p>
             </div>
           </div>
@@ -159,10 +168,18 @@ function ConnectFour() {
                 ([r, c]) => r === row && c === col,
               );
 
+              const isWinLine = winningLine.some(
+                ([r, c]) => r === row && c === col,
+              );
+
               return (
                 <div
                   key={`${row}-${col}`}
-                  className={isP1 ? "holes p1" : isP2 ? "holes p2" : "holes"}
+                  className={
+                    "holes " +
+                    (isP1 ? "p1" : isP2 ? "p2" : "") +
+                    (isWinLine ? " win-line" : "")
+                  }
                 />
               );
             })}
