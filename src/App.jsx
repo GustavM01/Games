@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import TicTacToe from "./pages/TicTacToe";
 import Snake from "./pages/Snake";
 import Menu from "./components/Menu";
@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Menu />
       <Routes>
         {/* <Route path="/" element={<Home />} /> */}
@@ -16,7 +16,7 @@ function App() {
         <Route path="snake" element={<Snake />} />
         <Route path="connectfour" element={<ConnectFour />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
