@@ -14,6 +14,7 @@ function ConnectFour() {
   const [showPreviewDisc, setShowPreviewDisc] = useState(true);
   const [winningLine, setWinningLine] = useState([]);
   const [winner, setWinner] = useState();
+  const [gameType, setGameType] = useState("twoPlayer");
 
   const columns = Array.from({ length: 7 });
   const rows = Array.from({ length: 6 });
@@ -131,85 +132,112 @@ function ConnectFour() {
   }
 
   return (
-    <div className="container" style={{ position: "relative" }}>
-      <div className="connect-grid">
-        {gameOver && (
-          <div
-            className="overlay"
+    <>
+      <div className="container" style={{ position: "relative" }}>
+        <div className="game-type-container">
+          <button onClick={handleReset} className="btn">
+            Reset
+          </button>
+          <button
+            className={
+              gameType === "twoPlayer"
+                ? "game-type-btn active"
+                : "game-type-btn"
+            }
             onClick={() => {
-              setGameOver(false);
-              setShowPreviewDisc(false);
+              handleReset();
+              setGameType("twoPlayer");
             }}
           >
-            <div className="overlay-card">
-              <p>Player {winner} won!</p>
-              <p className="continue">Click anywhere to continue</p>
+            2 player
+          </button>
+          {/* <button
+          className={
+            gameType === "easyBot" ? "game-type-btn active" : "game-type-btn"
+          }
+          onClick={() => {
+            handleReset();
+            setGameType("easyBot");
+          }}
+        >
+          Easy bot
+        </button> */}
+        </div>
+        <div className="connect-grid">
+          {gameOver && (
+            <div
+              className="overlay"
+              onClick={() => {
+                setGameOver(false);
+                setShowPreviewDisc(false);
+              }}
+            >
+              <div className="overlay-card">
+                <p>Player {winner} won!</p>
+                <p className="continue">Click anywhere to continue</p>
+              </div>
             </div>
-          </div>
-        )}
-        {columns.map((_, col) => (
-          <div
-            key={col}
-            className="column"
-            onMouseEnter={() => {
-              if (showPreviewDisc) setHoveredCol(col);
-            }}
-            onMouseLeave={() => {
-              if (showPreviewDisc) setHoveredCol(null);
-            }}
-            onClick={() => handlePutDisc(col)}
-          >
-            {rows.map((_, row) => {
-              const isP1 = playerOneDiscs.some(
-                ([r, c]) => r === row && c === col,
-              );
+          )}
+          {columns.map((_, col) => (
+            <div
+              key={col}
+              className="column"
+              onMouseEnter={() => {
+                if (showPreviewDisc) setHoveredCol(col);
+              }}
+              onMouseLeave={() => {
+                if (showPreviewDisc) setHoveredCol(null);
+              }}
+              onClick={() => handlePutDisc(col)}
+            >
+              {rows.map((_, row) => {
+                const isP1 = playerOneDiscs.some(
+                  ([r, c]) => r === row && c === col,
+                );
 
-              const isP2 = playerTwoDiscs.some(
-                ([r, c]) => r === row && c === col,
-              );
+                const isP2 = playerTwoDiscs.some(
+                  ([r, c]) => r === row && c === col,
+                );
 
-              const isWinLine = winningLine.some(
-                ([r, c]) => r === row && c === col,
-              );
+                const isWinLine = winningLine.some(
+                  ([r, c]) => r === row && c === col,
+                );
 
-              return (
+                return (
+                  <div
+                    key={`${row}-${col}`}
+                    className={
+                      "holes " +
+                      (isP1 ? "p1" : isP2 ? "p2" : "") +
+                      (isWinLine ? " win-line" : "")
+                    }
+                  />
+                );
+              })}
+              {fallingDisc?.col === col && (
                 <div
-                  key={`${row}-${col}`}
-                  className={
-                    "holes " +
-                    (isP1 ? "p1" : isP2 ? "p2" : "") +
-                    (isWinLine ? " win-line" : "")
-                  }
+                  className="falling-disc"
+                  style={{
+                    transform: `translateY(${fallingDisc.animating ? fallingDisc.row * 90 : -100}px)`,
+                    background:
+                      fallingDisc.player === 1 ? "var(--accent)" : "limegreen",
+                  }}
                 />
-              );
-            })}
-            {fallingDisc?.col === col && (
-              <div
-                className="falling-disc"
-                style={{
-                  transform: `translateY(${fallingDisc.animating ? fallingDisc.row * 90 : -100}px)`,
-                  background:
-                    fallingDisc.player === 1 ? "var(--accent)" : "limegreen",
-                }}
-              />
-            )}
-          </div>
-        ))}
-        {hoveredCol !== null && !gameOver && (
-          <div
-            className="preview-disc"
-            style={{
-              left: hoveredCol * 90 + 15,
-              background: currentPlayer === 1 ? "var(--accent)" : "limegreen",
-            }}
-          />
-        )}
+              )}
+            </div>
+          ))}
+          {hoveredCol !== null && !gameOver && (
+            <div
+              className="preview-disc"
+              style={{
+                left: hoveredCol * 90 + 15,
+                background: currentPlayer === 1 ? "var(--accent)" : "limegreen",
+              }}
+            />
+          )}
+        </div>
       </div>
-
-      <button onClick={handleReset} className="btn">
-        Reset
-      </button>
-    </div>
+    </>
   );
 }
 

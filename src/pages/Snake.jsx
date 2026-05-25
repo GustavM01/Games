@@ -188,59 +188,61 @@ function Snake() {
   }
 
   return (
-    <div className="container">
-      <div className="points-container">
-        {showGameOver && (
-          <div className="overlay">
-            <div className="overlay-card">
-              <p>Game Over</p>
-              <p>Score: {points}</p>
-              <p>Best score {highScore}</p>
-              <p className="continue">Press Spacebar to continue</p>
+    <>
+      <div className="container">
+        <div className="points-container">
+          {showGameOver && (
+            <div className="overlay">
+              <div className="overlay-card">
+                <p>Game Over</p>
+                <p>Score: {points}</p>
+                <p>Best score {highScore}</p>
+                <p className="continue">Press Spacebar to continue</p>
+              </div>
             </div>
-          </div>
-        )}
-        <p>Points: {points}</p>
-        <p>High score: {highScore}</p>
+          )}
+          <p>Points: {points}</p>
+          <p>High score: {highScore}</p>
+        </div>
+        <div className="grid">
+          {Array.from({ length: 20 }).map((_, row) =>
+            Array.from({ length: 20 }).map((_, col) => {
+              const isSnake = snake.some(([r, c]) => r === row && c === col);
+              const head = snake[snake.length - 1];
+              let headClass = "cell head";
+              if (direction[0] === -1) headClass += " head-up";
+              if (direction[0] === 1) headClass += " head-down";
+              if (direction[1] === -1) headClass += " head-left";
+              if (direction[1] === 1) headClass += " head-right";
+              const isHead = row === head[0] && col === head[1];
+              const isFood = row === food[0] && col === food[1];
+              return (
+                <div
+                  className={
+                    isHead
+                      ? headClass
+                      : isSnake
+                        ? "cell snake"
+                        : isFood
+                          ? "cell food"
+                          : "cell"
+                  }
+                  key={`${row}-${col}`}
+                />
+              );
+            }),
+          )}
+        </div>
+        <div className="snake-btn-container">
+          <button className="btn" onClick={() => handleStart()}>
+            {playing ? "Pause Game" : "Start Game"}
+          </button>
+          <button className="btn" onClick={() => handleReset()}>
+            Reset
+          </button>
+        </div>
       </div>
-      <div className="grid">
-        {Array.from({ length: 20 }).map((_, row) =>
-          Array.from({ length: 20 }).map((_, col) => {
-            const isSnake = snake.some(([r, c]) => r === row && c === col);
-            const head = snake[snake.length - 1];
-            let headClass = "cell head";
-            if (direction[0] === -1) headClass += " head-up";
-            if (direction[0] === 1) headClass += " head-down";
-            if (direction[1] === -1) headClass += " head-left";
-            if (direction[1] === 1) headClass += " head-right";
-            const isHead = row === head[0] && col === head[1];
-            const isFood = row === food[0] && col === food[1];
-            return (
-              <div
-                className={
-                  isHead
-                    ? headClass
-                    : isSnake
-                      ? "cell snake"
-                      : isFood
-                        ? "cell food"
-                        : "cell"
-                }
-                key={`${row}-${col}`}
-              />
-            );
-          }),
-        )}
-      </div>
-      <div className="snake-btn-container">
-        <button className="btn" onClick={() => handleStart()}>
-          {playing ? "Pause Game" : "Start Game"}
-        </button>
-        <button className="btn" onClick={() => handleReset()}>
-          Reset
-        </button>
-      </div>
-    </div>
+    </>
   );
 }
 

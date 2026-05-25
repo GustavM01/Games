@@ -18,11 +18,10 @@ function Menu() {
 
   return (
     <>
-      <div>
-        {/* <h1>Menu</h1> */}
-        <nav className="navbar">
-          <div style={{ width: "50px" }} />
-          <Link
+      {/* <h1>Menu</h1> */}
+      <nav className="navbar">
+        <div style={{ width: "50px" }} />
+        {/* <Link
             className={
               location.pathname === "/"
                 ? "navbar-item btn active"
@@ -31,48 +30,45 @@ function Menu() {
             to="/"
           >
             Home
-          </Link>
-          <br />
-          <Link
-            className={
-              location.pathname === "/tictactoe"
-                ? "navbar-item btn active"
-                : "navbar-item btn"
-            }
-            to="/tictactoe"
-          >
-            TicTacToe
-          </Link>
-          <br />
-          <Link
-            className={
-              location.pathname === "/snake"
-                ? "navbar-item btn active"
-                : "navbar-item btn"
-            }
-            to="/snake"
-          >
-            Snake
-          </Link>
-          <Link
-            className={
-              location.pathname === "/connectfour"
-                ? "navbar-item btn active"
-                : "navbar-item btn"
-            }
-            to="/connectfour"
-          >
-            Connect four
-          </Link>
-          <button
-            className={theme === "dark" ? "theme-btn dark" : "theme-btn light"}
-            onClick={() => changeTheme()}
-          >
-            <div className="knob"></div>
-          </button>
-        </nav>
-        <Outlet />
-      </div>
+          </Link> */}
+        <Link
+          className={
+            location.pathname === "/"
+              ? "navbar-item btn active"
+              : "navbar-item btn"
+          }
+          to="/"
+        >
+          TicTacToe
+        </Link>
+        <Link
+          className={
+            location.pathname === "/snake"
+              ? "navbar-item btn active"
+              : "navbar-item btn"
+          }
+          to="/snake"
+        >
+          Snake
+        </Link>
+        <Link
+          className={
+            location.pathname === "/connectfour"
+              ? "navbar-item btn active"
+              : "navbar-item btn"
+          }
+          to="/connectfour"
+        >
+          Connect four
+        </Link>
+        <button
+          className={theme === "dark" ? "theme-btn dark" : "theme-btn light"}
+          onClick={() => changeTheme()}
+        >
+          <div className="knob"></div>
+        </button>
+      </nav>
+      <Outlet />
     </>
   );
 }

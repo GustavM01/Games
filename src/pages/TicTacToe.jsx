@@ -300,7 +300,7 @@ function TicTacToe() {
         {!win && gameType === "twoPlayer" && (
           <p>{previousTurn === "O" ? "X Tur att spela" : "O Tur att spela"}</p>
         )}
-        {gameType != "twoPlayer" && !win && <p>Du är X</p>}
+        {gameType != "twoPlayer" && !win && !tie && <p>Du är X</p>}
         {win && gameType === "twoPlayer" && <p>{previousTurn + " vann"}</p>}
         {win && previousTurn === "X" && gameType != "twoPlayer" && (
           <p>Du vann</p>
