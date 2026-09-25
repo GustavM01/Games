@@ -163,6 +163,7 @@
   justify-content: center;
   align-items: center;
   gap: 20px;
+  overflow: hidden;
 }
 
 .board {
@@ -218,4 +219,37 @@
 .reset-btn:hover {
   background: var(--bg-hover);
   color: var(--text-hover);
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  .board {
+    max-width: 80%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(3, 75px);
+    grid-template-rows: repeat(3, 75px);
+    gap: 5px;
+  }
+
+  .game-type-container {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    width: fit-content;
+    margin: 10px;
+  }
+
+  .game-type-btn {
+    flex: 1;
+    padding: 5px 8px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #aaa;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
 }

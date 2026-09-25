@@ -1,9 +1,9 @@
 .navbar {
-  margin: 50px auto 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
+  margin: 50px auto 40px;
 }
 
 .navbar-item {
@@ -43,4 +43,58 @@
   transition:
     transform 0.3s,
     background 0.3s;
+}
+
+.mobile-menu {
+  display: none;
+  justify-content: space-between;
+}
+
+.mobile-navbar.open {
+  transform: translateX(0);
+}
+
+@media (max-width: 480px) {
+  .mobile-navbar {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0.5rem 1.5rem;
+    background: var(--bg);
+    transform: translateX(100%);
+    transition: transform 0.25s ease-out;
+  }
+
+  .mobile-navbar.open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu {
+    display: flex;
+    margin: 10px;
+  }
+
+  .mobile-menu-left {
+    display: flex;
+  }
+
+  .menu-btn {
+    display: flex;
+    z-index: 200;
+    width: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1/1;
+    background: var(--bg-hover);
+    border: none;
+    border-radius: 5px;
+  }
+
+  .menu-btn svg {
+    color: var(--text);
+  }
 }
