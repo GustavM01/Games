@@ -19,9 +19,13 @@
   z-index: 1;
 }
 
+:root {
+  --hole-size: min(8vw, 80px);
+}
+
 .holes {
-  width: 80px;
-  height: 80px;
+  width: var(--hole-size);
+  aspect-ratio: 1/1;
   border-radius: 50%;
   background: var(--bg);
   position: relative;
@@ -51,8 +55,8 @@
 .preview-disc {
   position: absolute;
   top: -90px;
-  width: 80px;
-  height: 80px;
+  width: var(--hole-size);
+  aspect-ratio: 1/1;
   border-radius: 50%;
   box-shadow: 0px 3px 10px black;
 
@@ -63,8 +67,8 @@
 
 .falling-disc {
   position: absolute;
-  width: 80px;
-  height: 80px;
+  width: var(--hole-size);
+  aspect-ratio: 1/1;
   border-radius: 50%;
   top: 0;
   box-shadow:

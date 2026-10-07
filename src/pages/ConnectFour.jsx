@@ -19,6 +19,25 @@ function ConnectFour() {
   const columns = Array.from({ length: 7 });
   const rows = Array.from({ length: 6 });
 
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const handleResize = () => {
+      let newWidth = (window.innerWidth / 100) * 8;
+      if (newWidth <= 80) {
+        setWidth(newWidth);
+      } else {
+        setWidth(80);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   function getDropRow(col) {
     const all = [...playerOneDiscs, ...playerTwoDiscs];
 
@@ -162,6 +181,7 @@ function ConnectFour() {
         >
           Easy bot
         </button> */}
+          <button onClick={() => console.log(width)}>TEST</button>
         </div>
         <div className="connect-grid">
           {gameOver && (
@@ -218,7 +238,7 @@ function ConnectFour() {
                 <div
                   className="falling-disc"
                   style={{
-                    transform: `translateY(${fallingDisc.animating ? fallingDisc.row * 90 : -100}px)`,
+                    transform: `translateY(${fallingDisc.animating ? fallingDisc.row * (width + 10) : -100}px)`,
                     background:
                       fallingDisc.player === 1 ? "var(--accent)" : "limegreen",
                   }}
@@ -226,11 +246,11 @@ function ConnectFour() {
               )}
             </div>
           ))}
-          {hoveredCol !== null && !gameOver && (
+          {hoveredCol !== null && !gameOver && width > 45 && (
             <div
               className="preview-disc"
               style={{
-                left: hoveredCol * 90 + 15,
+                left: hoveredCol * (width + 10) + 15,
                 background: currentPlayer === 1 ? "var(--accent)" : "limegreen",
               }}
             />
