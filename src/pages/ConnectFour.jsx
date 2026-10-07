@@ -181,7 +181,6 @@ function ConnectFour() {
         >
           Easy bot
         </button> */}
-          <button onClick={() => console.log(width)}>TEST</button>
         </div>
         <div className="connect-grid">
           {gameOver && (
