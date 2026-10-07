@@ -1,17 +1,23 @@
+:root {
+  --cell-size: round(down, min(3vw, 27px), 1px);
+  --grid-width: calc(var(--cell-size) * 20 + 19 * 2px);
+}
+
 .grid {
+  width: var(--grid-width);
   display: grid;
-  grid-template-columns: repeat(20, 20px);
+  grid-template-columns: repeat(20, var(--cell-size));
   gap: 2px;
 }
 
 .cell {
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  aspect-ratio: 1/1;
   background: #6b6b6b;
   transition:
     background 0.2s,
     border-radius 0.2s;
-  border-radius: 2px;
+  border-radius: 20%;
 }
 
 .overlay {
@@ -62,32 +68,36 @@
 
 .snake {
   background: rgb(0, 163, 0);
-  border-radius: 5px;
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 42%;
 }
 
 .food {
   background: red;
-  border-radius: 7px;
+  border-radius: 20%;
   position: relative;
 }
 
 .food::after {
   position: absolute;
   content: "";
-  width: 2.5px;
-  height: 7px;
+  width: 12.5%;
+  height: 35%;
   background: green;
-  top: -4.5px;
-  right: 6.5px;
+  top: -22.5%;
+  right: 32.5%;
   transform: rotate(30deg);
   border-radius: 3px / 5px;
   border: 1px solid darkgreen;
 }
 
 .head {
+  width: 100%;
+  aspect-ratio: 1/1;
   background: limegreen;
   position: relative;
-  border-radius: 6px;
+  border-radius: 42%;
   overflow: hidden;
 }
 
@@ -114,20 +124,21 @@
 .head::after {
   content: "";
   position: absolute;
-  width: 5.5px;
-  height: 5.5px;
+  width: 20%;
+  height: 20%;
   background: white;
   border-radius: 50%;
-  top: 3px;
-  box-shadow: inset 2.2px 2.2px 0 black;
+  top: 11%;
+  box-shadow: inset calc(var(--cell-size) * 0.08) calc(var(--cell-size) * 0.08)
+    0 black;
 }
 
 .head::before {
-  left: 3px;
+  left: 11%;
 }
 
 .head::after {
-  right: 3px;
+  right: 11%;
 }
 
 @keyframes fadeIn {
